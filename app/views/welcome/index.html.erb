@@ -1,18 +1,10 @@
-<div class="container">
-  <div class="jumbotron">
-    <h1>Pomodoro Timer</h1>
-    <p>Online and sharing Pomodoro timer</p>
-  </div>
-</div>
-
-<div class="container">
-  <div class="col-md-6 col-md-offset-4">
-    <form class="form-inline" action="">
-      <div class="form-group">
-        <label class="sr-only" for="roomName">Room name</label>
-        <input type="text" class="form-control" id="roomName" placeholder="Room name">
-      </div>
-      <button type="submit" class="btn btn-default">Create</button>
-    </form>
+<div class="row">
+  <div class="col-md-4 col-md-offset-4">
+    <%= form_tag :rooms, {'class' => 'form-signin'} do %>
+      <h2 class="form-signin-heading">Please create new room</h2>
+      <label for="inputRoomName" class="sr-only">Room name</label>
+      <input type="text" name="name" id="inputRoomName" class="form-control" placeholder="Room name" required="" autofocus="">
+      <button class="btn btn-lg btn-primary btn-block" type="submit">Create new room</button>
+    <% end %>
   </div>
 </div>
