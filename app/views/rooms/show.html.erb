@@ -1,24 +1,91 @@
 <div class="row">
   <div class="col-sm-3 col-md-2 sidebar">
     <ul class="nav nav-sidebar">
-      <li><a href="">Nav item again</a></li>
-      <li><a href="">One more nav</a></li>
-      <li><a href="">Another nav item</a></li>
+      <li><a class="btn btn-default start-btn">START</a></li>
+      <li><a class="btn btn-default stop-btn">STOP</a></li>
     </ul>
 
-    <form class="form-inline">
+    <%= form_for @room do %>
       <div class="form-group">
-        <label class="sr-only" for="exampleInputEmail2">Timer</label>
-        <input type="email" class="form-control" id="exampleInputEmail2" placeholder="Enter timer (mm:ss)">
+        <label class="sr-only" for="inputTimer">Timer</label>
+        <input type="text" class="form-control" name="timer" id="inputTimer" value="<%= @room.timer %>" placeholder="Enter timer (mm:ss)">
       </div>
-      <button type="submit" class="btn btn-default">Save Timer</button>
-    </form>
+      <button class="btn btn-default btn-block" type="submit">update</button>
+    <% end %>
   </div>
 
   <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
     <div class="jumbotron">
-      <h1 class="timer-countdown">24:59</h1>
+      <h1 class="timer-countdown"><%= @room.timer %></h1>
     </div>
   </div>
 </div>
 
+<script>
+  var render_countdown = function(sec) {
+    var str = Math.floor(sec/60) + ':';
+    if (sec % 60 < 10) {
+      str += '0' + (sec % 60);
+    } else {
+      str += (sec % 60);
+    }
+    $('.timer-countdown').html(str);
+  };
+
+  var ajaxSettings = {
+    url: '<%= room_path(@room, format: 'json') %>',
+    async: true,
+    dataType: 'json',
+    success: function(data, dataType) {
+      if (data.started_at) {
+        timer.countdown = data.countdown_sec;
+        start();
+      }
+    },
+    error: function(data, dataType) {
+    }
+  };
+
+  var timer = {};
+
+  var countdown = function() {
+    render_countdown(timer.countdown);
+    if (timer.countdown == 0) {
+      stop();
+    }
+    timer.countdown -= 1;
+  }
+
+  var start = function() {
+    stop();
+    countdown();
+    timer.interval = setInterval(countdown, 1000);
+  };
+
+  var stop = function() {
+    if (timer.interval) {
+      clearInterval(timer.interval);
+    }
+  }
+
+  var sync = function() {
+    $.ajax(ajaxSettings);
+  };
+
+  $(document).ready(function() {
+    sync();
+    setInterval(sync, 10 * 1000);
+
+    $('.start-btn').on('click', function() {
+      $.post('<%= start_room_path(@room) %>', {}, function() {
+        location.reload();
+      });
+    });
+
+    $('.stop-btn').on('click', function() {
+      $.post('<%= stop_room_path(@room) %>', {}, function() {
+        location.reload();
+      });
+    });
+  });
+</script>
