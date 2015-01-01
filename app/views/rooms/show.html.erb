@@ -40,6 +40,8 @@
       if (data.started_at) {
         timer.countdown = data.countdown_sec;
         start();
+      } else {
+        stop();
       }
     },
     error: function(data, dataType) {
