@@ -1,7 +1,6 @@
 class RoomsController < ApplicationController
   def show
     @room = Room.find_by!(token: params[:id])
-    render json: @room
   end
 
   def create
