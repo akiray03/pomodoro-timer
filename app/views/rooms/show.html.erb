@@ -37,7 +37,7 @@
     async: true,
     dataType: 'json',
     success: function(data, dataType) {
-      if (data.started_at) {
+      if (data.started_at && data.countdown_sec >= 0) {
         timer.countdown = data.countdown_sec;
         start();
       } else {
