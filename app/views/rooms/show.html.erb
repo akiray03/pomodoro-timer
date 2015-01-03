@@ -54,6 +54,7 @@
   var countdown = function() {
     render_countdown(timer.countdown);
     if (timer.countdown == 0) {
+      alert('done');
       stop();
     }
     timer.countdown -= 1;
