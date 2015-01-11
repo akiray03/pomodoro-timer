@@ -54,7 +54,10 @@
   var countdown = function() {
     render_countdown(timer.countdown);
     if (timer.countdown == 0) {
+      stop();
       alert('done');
+    }
+    if (timer.countdown < 0) {
       stop();
     }
     timer.countdown -= 1;
